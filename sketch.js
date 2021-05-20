@@ -12,13 +12,19 @@ function setup() {
 
 function draw() {
   background(0);
-  
-  for(let i = 0; i < 0; i++){
-    if(ship.hits(asteroids[i])){
-      print("OOF");
+
+  for (let i = 0; i < asteroids.length; i++) {
+    if (ship.hits(asteroids[i])) {
+      console.log("OOF!");
+      if (asteroids[i].r > 10) {
+        var newAsteroids = asteroids[i].breakup();
+        asteroids = asteroids.concat(newAsteroids);
+      }
+      asteroids.splice(i, 1);
+      break;
     }
   }
-  
+
   ship.render();
   ship.control();
   ship.update();
@@ -34,17 +40,17 @@ function draw() {
     if (lasers[i].offscreen()) {
       lasers.splice(i, 1);
     } else {
-    for (let j = asteroids.length - 1; j >= 0; j--) {
-      if (lasers[i].hits(asteroids[j])) {
-        if (asteroids[j].r > 10) {
-          var newAsteroids = asteroids[j].breakup();
-          asteroids = asteroids.concat(newAsteroids);
+      for (let j = asteroids.length - 1; j >= 0; j--) {
+        if (lasers[i].hits(asteroids[j])) {
+          if (asteroids[j].r > 10) {
+            var newAsteroids = asteroids[j].breakup();
+            asteroids = asteroids.concat(newAsteroids);
+          }
+          asteroids.splice(j, 1);
+          lasers.splice(i, 1);
+          break;
         }
-        asteroids.splice(j, 1);
-        lasers.splice(i, 1);
-        break;
       }
     }
   }
-}
 }
